@@ -1,7 +1,5 @@
 //Author: Braeden Lisowski
-//Due Date: 5/06/2019
-//Instructor: Alexi Brooks
-//Final Project
+//Crawl The Dungeon mega file
 #include <string>
 #include <iostream>
 #include <stdio.h>
@@ -215,15 +213,15 @@ void startup(){
     }
     myWindow = SDL_CreateWindow("Crawl the Dungeon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_SHOWN );//the main window
     surfaceWithData = SDL_GetWindowSurface(myWindow);
-    curSurface[BASIC_TILE] = IMG_Load("basictiles.png"); //load in all textures
-    curSurface[LAVA_TILE] = IMG_Load("lava.png");
-    curSurface[CHARACTER_TILE] = IMG_Load("mainCHar.png");
-    curSurface[HEALTH_ICON] = IMG_Load("heart.png");
-    curSurface[ENEMY_TILE] = IMG_Load("slime.png");
-    curSurface[LOOT_TILE] = IMG_Load("loot.png");
-    background = IMG_Load("background.png");
-    curSurface[MOVEMENT_ICON] = IMG_Load("movement.png");
-    curSurface[STAIRS_TILE] = IMG_Load("stairs.png");
+    curSurface[BASIC_TILE] = IMG_Load("resources/basictiles.png"); //load in all textures
+    curSurface[LAVA_TILE] = IMG_Load("resources/lava.png");
+    curSurface[CHARACTER_TILE] = IMG_Load("resources/mainCHar.png");
+    curSurface[HEALTH_ICON] = IMG_Load("resources/heart.png");
+    curSurface[ENEMY_TILE] = IMG_Load("resources/slime.png");
+    curSurface[LOOT_TILE] = IMG_Load("resources/loot.png");
+    background = IMG_Load("resources/background.png");
+    curSurface[MOVEMENT_ICON] = IMG_Load("resources/movement.png");
+    curSurface[STAIRS_TILE] = IMG_Load("resources/stairs.png");
     srand(time(NULL)); //make sure random works correctly
     
     for(int i = 0; i < 10; ++i){
