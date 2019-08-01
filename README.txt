@@ -1,7 +1,7 @@
 CRAWL THE DUNGEON GAME
 Written for Linux
 AUTHOR: Braeden Lisowski
-If the current a.out does not work on your machine I compiled this on a linux with the command:
+You can compile this game on linux with the command: 
 g++ *.cpp -w -lSDL2 -SDL2_image
 This would of course require SDL2 and SDL2_image installed to do so along with a C++ compiler. All other libraries are included in the C++ compiler.
 
