@@ -115,12 +115,10 @@ class Soldier{
 };
 
 int main(int argv, char* args[]){
-    
     //initializations
     int x; 
     int y;
-    
-    
+
     mapMaker(allTiles);
     startup();
     //event loop
@@ -212,17 +210,19 @@ void startup(){
         std::cout << "panic sdl failed";
         exit(1);
     }
+    IMG_Init(IMG_INIT_PNG);
     myWindow = SDL_CreateWindow("Crawl the Dungeon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_SHOWN );//the main window
     surfaceWithData = SDL_GetWindowSurface(myWindow);
-    curSurface[BASIC_TILE] = IMG_Load("/resources/basictiles.png"); //load in all textures
-    curSurface[LAVA_TILE] = IMG_Load("/resources/lava.png");
-    curSurface[CHARACTER_TILE] = IMG_Load("/resources/mainChar.png");
-    curSurface[HEALTH_ICON] = IMG_Load("/resources/heart.png");
-    curSurface[ENEMY_TILE] = IMG_Load("/resources/slime.png");
-    curSurface[LOOT_TILE] = IMG_Load("/resources/loot.png");
-    background = IMG_Load("/resources/background.png");
-    curSurface[MOVEMENT_ICON] = IMG_Load("/resources/movement.png");
-    curSurface[STAIRS_TILE] = IMG_Load("/resources/stairs.png");
+    curSurface[BASIC_TILE] = IMG_Load(
+            "C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/basictiles.png"); //load in all textures
+    curSurface[LAVA_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/lava.png");
+    curSurface[CHARACTER_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/mainChar.png");
+    curSurface[HEALTH_ICON] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/heart.png");
+    curSurface[ENEMY_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/slime.png");
+    curSurface[LOOT_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/loot.png");
+    background = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/background.png");
+    curSurface[MOVEMENT_ICON] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/movement.png");
+    curSurface[STAIRS_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/stairs.png");
     srand(time(NULL)); //make sure random works correctly
     
     for(int i = 0; i < 10; ++i){
