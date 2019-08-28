@@ -1,7 +1,3 @@
-//
-// Created by Braeden on 8/28/2019.
-//
-
 #include <cmath>
 #include "TilesEnum.cpp"
 #include "Character.cpp"
@@ -35,30 +31,22 @@ public:
                 if (abs(xPos - positionX) >= abs(yPos -
                                                  positionY)) {//basic AI essentially if the player is more horizontally further go horizontal otherwise go vertical
                     if (xPos - positionX > 0) {
-                        if (allTiles[yPos][xPos - 1] == BASIC_TILE) { //enemies can only walk on the basic tiles
-                            allTiles[yPos][xPos] = BASIC_TILE; //reset previous tile
-                            xPos--; //change position
-                            allTiles[yPos][xPos] = ENEMY_TILE; //change new tile
+                        if (!moveR(positionX, positionY, allTiles)) {
+                            findNextMove(positionX, positionY, allTiles, 'R');
                         }
                     } else {
-                        if (allTiles[yPos][xPos + 1] == BASIC_TILE) { //all work the same just for different cases
-                            allTiles[yPos][xPos] = BASIC_TILE;
-                            xPos++;
-                            allTiles[yPos][xPos] = ENEMY_TILE;
+                        if (!moveL(positionX, positionY, allTiles)) {
+                            findNextMove(positionX, positionY, allTiles, 'L');
                         }
                     }
                 } else {
                     if (yPos/*enemy position*/ - positionY /*character postion*/ > 0) {
-                        if (allTiles[yPos - 1][xPos] == BASIC_TILE) {
-                            allTiles[yPos][xPos] = BASIC_TILE;
-                            yPos--;
-                            allTiles[yPos][xPos] = ENEMY_TILE;
+                        if (!moveU(positionX, positionY, allTiles)) {
+                            findNextMove(positionX, positionY, allTiles, 'U');
                         }
                     } else {
-                        if (allTiles[yPos + 1][xPos] == BASIC_TILE) {
-                            allTiles[yPos][xPos] = BASIC_TILE;
-                            yPos++;
-                            allTiles[yPos][xPos] = ENEMY_TILE;
+                        if (!moveD(positionX, positionY, allTiles)) {
+                            findNextMove(positionX, positionY, allTiles, 'D');
                         }
                     }
                 }
@@ -66,4 +54,130 @@ public:
             attack(positionX, positionY, mainChar);
         }
     }
+
+    bool moveR(int positionX, int positionY, int allTiles[34][60]) {
+        if (allTiles[yPos][xPos - 1] == BASIC_TILE) { //enemies can only walk on the basic tiles
+            allTiles[yPos][xPos] = BASIC_TILE; //reset previous tile
+            xPos--; //change position
+            allTiles[yPos][xPos] = ENEMY_TILE; //change new tile
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    bool moveL(int positionX, int positionY, int allTiles[34][60]) {
+        if (allTiles[yPos][xPos + 1] == BASIC_TILE) { //all work the same just for different cases
+            allTiles[yPos][xPos] = BASIC_TILE;
+            xPos++;
+            allTiles[yPos][xPos] = ENEMY_TILE;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    bool moveU(int positionX, int positionY, int allTiles[34][60]) {
+        if (allTiles[yPos - 1][xPos] == BASIC_TILE) {
+            allTiles[yPos][xPos] = BASIC_TILE;
+            yPos--;
+            allTiles[yPos][xPos] = ENEMY_TILE;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    bool moveD(int positionX, int positionY, int allTiles[34][60]) {
+        if (allTiles[yPos + 1][xPos] == BASIC_TILE) {
+            allTiles[yPos][xPos] = BASIC_TILE;
+            yPos++;
+            allTiles[yPos][xPos] = ENEMY_TILE;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void findNextMove(int positionX, int positionY, int allTiles[34][60], char lastCheck) {
+        switch (lastCheck) {
+            case 'U':
+                if (xPos - positionX > 0) {
+                    if (!moveR(positionX, positionY, allTiles)) {
+                        if (!moveL(positionX, positionY, allTiles)) {
+                            if (!moveD(positionX, positionY, allTiles)) {
+                                //enemy is surrounded
+                            }
+                        }
+                    }
+                } else {
+                    if (!moveL(positionX, positionY, allTiles)) {
+                        if (!moveR(positionX, positionY, allTiles)) {
+                            if (!moveD(positionX, positionY, allTiles)) {
+                                //enemy is surrounded
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'D':
+                if (xPos - positionX > 0) {
+                    if (!moveR(positionX, positionY, allTiles)) {
+                        if (!moveL(positionX, positionY, allTiles)) {
+                            if (!moveU(positionX, positionY, allTiles)) {
+                                //enemy is surrounded
+                            }
+                        }
+                    }
+                } else {
+                    if (!moveL(positionX, positionY, allTiles)) {
+                        if (!moveR(positionX, positionY, allTiles)) {
+                            if (!moveU(positionX, positionY, allTiles)) {
+                                //enemy is surrounded
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'R':
+                if (yPos/*enemy position*/ - positionY /*character postion*/ > 0) {
+                    if (!moveU(positionX, positionY, allTiles)) {
+                        if (!moveD(positionX, positionY, allTiles)) {
+                            if (!moveL(positionX, positionY, allTiles)) {
+                                //enemy is surrounded
+                            }
+                        }
+                    }
+                } else {
+                    if (!moveD(positionX, positionY, allTiles)) {
+                        if (!moveU(positionX, positionY, allTiles)) {
+                            if (!moveL(positionX, positionY, allTiles)) {
+                                //enemy is surrounded
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'L':
+                if (yPos/*enemy position*/ - positionY /*character postion*/ > 0) {
+                    if (!moveU(positionX, positionY, allTiles)) {
+                        if (!moveD(positionX, positionY, allTiles)) {
+                            if (!moveR(positionX, positionY, allTiles)) {
+                                //enemy is surrounded
+                            }
+                        }
+                    }
+                } else {
+                    if (!moveD(positionX, positionY, allTiles)) {
+                        if (!moveU(positionX, positionY, allTiles)) {
+                            if (!moveR(positionX, positionY, allTiles)) {
+                                //enemy is surrounded
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
 };
