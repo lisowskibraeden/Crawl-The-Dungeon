@@ -7,16 +7,17 @@ class Character{ //main character class
     public:
     int health;//different stats
     int movement;
+    bool dead = false;
     Character(){
         health = 3; //starting health and movement
         movement = 1;
     }
-    bool healthDown(){ //lowers the health stat
+
+    void healthDown() { //lowers the health stat
         health--;
-        if(health == 0){ //when the health is at 0 return false to signal game over
-            return false;
+        if (health <= 0) { //when the health is at 0 return false to signal game over
+            dead = true;
         }
-        return true;
     }
     void healthUp(){ //up the health stat
         health++;

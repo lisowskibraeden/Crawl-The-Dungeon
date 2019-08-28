@@ -5,22 +5,11 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Character.cpp"
 #include <ctime>
 #include "Room_List.cpp"
+#include "Soldier.cpp"
 //enum to keep track of which value corresponds with each tile type
-enum tiles{
-    BLANK_TILE = 0,
-    BASIC_TILE = 1,
-    LAVA_TILE = 2,
-    STAIRS_TILE = 3,
-    CHARACTER_TILE = 4,
-    ENEMY_TILE = 5,
-    LOOT_TILE = 6,
-    HEALTH_ICON = 7,
-    MOVEMENT_ICON = 8
-};
-class Soldier; //the enemy 
+
 const int tileX = 20; //the x length of tiles
 const int tileY = 20; //the y length of tiles
 SDL_Window* myWindow = NULL;
@@ -51,68 +40,6 @@ void updateWindow();
 void updateHealth();
 bool done = false;
 using namespace std;
-class Soldier{
-    public:
-    bool attacked = false;
-    int movement;
-    int xPos;
-    int yPos;
-    Soldier(int x, int y){
-        xPos = x;
-        yPos = y;
-        movement = 1;
-    }
-    void attack(){ //enemy attack 
-        if(!attacked){
-            if(((abs((xPos - positionX)) <= movement) && (abs((yPos - positionY)) <= 0)) || ((abs((yPos - positionY)) == (movement)) && (abs((xPos - positionX)) <= 0))){ //checks to see if the player is near the enemy
-                if(!mainChar.healthDown()){ //decrement health
-                    gameOver(); //check to see if player is dead
-                }
-                updateWindow(); //updates health
-            }
-        }
-    }
-    void move(){
-        if(!attacked){ //make sure the enemy hasn't attacked
-            for(int i = movement; i > 0; i--){ 
-                if(abs(xPos - positionX) >= abs(yPos - positionY)){//basic AI essentially if the player is more horizontally further go horizontal otherwise go vertical
-                    if(xPos - positionX > 0){
-                        if(allTiles[yPos][xPos - 1] == BASIC_TILE){ //enemies can only walk on the basic tiles
-                            allTiles[yPos][xPos] = BASIC_TILE; //reset previous tile
-                            xPos--; //change position
-                            allTiles[yPos][xPos] = ENEMY_TILE; //change new tile
-                            updateWindow(); //update
-                        }
-                    }else{
-                        if(allTiles[yPos][xPos + 1] == BASIC_TILE){ //all work the same just for different cases
-                            allTiles[yPos][xPos] = BASIC_TILE;
-                            xPos++;
-                            allTiles[yPos][xPos] = ENEMY_TILE;
-                            updateWindow();
-                        }
-                    }
-                }else{
-                    if(yPos/*enemy position*/ - positionY /*character postion*/ > 0){
-                        if(allTiles[yPos - 1][xPos] == BASIC_TILE){
-                            allTiles[yPos][xPos] = BASIC_TILE; 
-                            yPos--;
-                            allTiles[yPos][xPos] = ENEMY_TILE;
-                            updateWindow();
-                        }
-                    }else{
-                        if(allTiles[yPos + 1][xPos] == BASIC_TILE){
-                            allTiles[yPos][xPos] = BASIC_TILE;
-                            yPos++;
-                            allTiles[yPos][xPos] = ENEMY_TILE;
-                            updateWindow();
-                        }
-                    }
-                }
-            }
-            attack();
-        }
-    }
-};
 
 int main(int argv, char* args[]){
     //initializations
@@ -124,11 +51,13 @@ int main(int argv, char* args[]){
     //event loop
     SDL_Event eventObject; 
     while(!done){
+
         while(SDL_PollEvent(&eventObject)){
             if(eventObject.type == SDL_QUIT){
                 done = true;
             }
             else if(eventObject.type == SDL_MOUSEBUTTONDOWN){
+                cout << mainChar.health << endl;
                 switch(eventObject.button.button){
                     case SDL_BUTTON_LEFT:  //on left click
                         SDL_GetMouseState(&x, &y);
@@ -223,12 +152,12 @@ void startup(){
     background = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/background.png");
     curSurface[MOVEMENT_ICON] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/movement.png");
     curSurface[STAIRS_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/stairs.png");
+    SDL_SetWindowIcon(myWindow, curSurface[CHARACTER_TILE]);
     srand(time(NULL)); //make sure random works correctly
     
     for(int i = 0; i < 10; ++i){
         for(int x = 0; x < 10; ++x){ //set up the maps
             allSurfaces[i][x] = curSurface[allTiles[i][x]];
-            
         }
     }
     updateWindow();
@@ -302,8 +231,13 @@ void nextTurn(){ //ends character turn and allows enemies to move
 void enemyMove(){ //makes all enemies move
     for(int i = 0; i < 10; i++){
         if(enemies[i] != NULL){
-            (*enemies[i]).move(); //allows the enmies to move around and attack
+            (*enemies[i]).move(positionX, positionY, allTiles, &mainChar); //allows the enmies to move around and attack
         }
+    }
+    updateWindow();
+    cout << mainChar.health << endl;
+    if (mainChar.dead) {
+        gameOver();
     }
 }
 
