@@ -41,7 +41,7 @@ void enemyMove();
 
 void startup();
 
-void characterMove(int x, int y);
+void characterMove(char move);
 
 void nextFloor();
 
@@ -55,10 +55,6 @@ bool done = false;
 using namespace std;
 
 int main(int argv, char *args[]) {
-    //initializations
-    int x;
-    int y;
-
     mapMaker(allTiles);
     startup();
     //event loop
@@ -68,12 +64,19 @@ int main(int argv, char *args[]) {
         while (SDL_PollEvent(&eventObject)) {
             if (eventObject.type == SDL_QUIT) {
                 done = true;
-            } else if (eventObject.type == SDL_MOUSEBUTTONDOWN) {
-                cout << mainChar.health << endl;
-                switch (eventObject.button.button) {
-                    case SDL_BUTTON_LEFT:  //on left click
-                        SDL_GetMouseState(&x, &y);
-                        characterMove(x, y); //try to move the player
+            } else if (eventObject.type == SDL_KEYUP) {
+                switch (eventObject.key.keysym.sym) {
+                    case SDLK_UP:  //on left click
+                        characterMove('U'); //try to move the player
+                        break;
+                    case SDLK_DOWN:
+                        characterMove('D');
+                        break;
+                    case SDLK_RIGHT:
+                        characterMove('R');
+                        break;
+                    case SDLK_LEFT:
+                        characterMove('L');
                         break;
                 }
             } else if (eventObject.type == SDL_KEYDOWN) {
@@ -94,60 +97,63 @@ void nextFloor() { //send the player to the next floor
     floorsTraveled++;
 }
 
-void characterMove(int x, int y) { //character turn to move
-    int xTile = x / tileX; //finds what tile the player clicked on
-    int yTile = y / tileY;
-    if (((abs((yTile - positionY)) <= movesLeft) && ((xTile - positionX) == 0)) ||
-        ((abs((xTile - positionX)) <= movesLeft) &&
-         ((yTile - positionY) == 0))) { //checks to see if the player clicked on a tile they can move to
-        if (xTile == positionX && yTile == positionY) { //you can not move to your own tile (hit return to end turn)
-            //do nothing
-        } else {
-            movesLeft -= abs((yTile - positionY));
-            movesLeft -= abs((xTile - positionX));
-            switch (allTiles[yTile][xTile]) {
-
-                case BASIC_TILE: //when moving to a basic tile
-                    allTiles[positionY][positionX] = BASIC_TILE; //reset previous tile
-                    positionX = xTile; //change position
-                    positionY = yTile;
-                    allTiles[positionY][positionX] = CHARACTER_TILE; //place character at new tile
-                    updateWindow(); //update to user
-                    break;
-                case LAVA_TILE: //when "moving" to a lava tile
-                    break; //you can't move onto lava
-                case STAIRS_TILE: //when moving to a stairs tile
-                    nextFloor(); //send player to the next floor
-                    break;
-                case LOOT_TILE: //when moving to a loot tile
-                    allTiles[positionY][positionX] = BASIC_TILE; //replace old tile
-                    positionX = xTile; //set new position
-                    positionY = yTile;
-                    allTiles[positionY][positionX] = CHARACTER_TILE; //set player to new tile
-                    loot(); //give player loot
-                    updateWindow(); //update to user
-                    break;
-                case ENEMY_TILE: //when moving to an enemy tile
-                    allTiles[positionY][positionX] = BASIC_TILE; //reset old tile
-                    positionX = xTile; //set new position
-                    positionY = yTile;
-                    for (int i = 0; i < 10; i++) {
-                        if (enemies[i] != NULL) { //make sure there is an enemy to prevent null pointer
-                            if (enemies[i]->xPos == positionX &&
-                                enemies[i]->yPos == positionY) { //find which enemy died
-                                (*enemies[i]).attacked = true; //"delete" enemy by marking them attacked
-                            }
-                        }
-                    }
-                    allTiles[positionY][positionX] = CHARACTER_TILE;
-                    updateWindow(); //make sure window updates
-            }
-            if (movesLeft == 0) { //automatically set next turn when the player can not do anything else
-                nextTurn();
-            }
-        }
+void characterMove(char move) { //character turn to move
+    int xTile = positionX; //finds what tile the player clicked on
+    int yTile = positionY;
+    switch (move) {
+        case 'U':
+            yTile--;
+            break;
+        case 'D':
+            yTile++;
+            break;
+        case 'R':
+            xTile++;
+            break;
+        case 'L':
+            xTile--;
+            break;
     }
-    //enemyMove();
+    movesLeft--;
+    switch (allTiles[yTile][xTile]) {
+        case BASIC_TILE: //when moving to a basic tile
+            allTiles[positionY][positionX] = BASIC_TILE; //reset previous tile
+            positionX = xTile; //change position
+            positionY = yTile;
+            allTiles[positionY][positionX] = CHARACTER_TILE; //place character at new tile
+            updateWindow(); //update to user
+            break;
+        case LAVA_TILE: //when "moving" to a lava tile
+            break; //you can't move onto lava
+        case STAIRS_TILE: //when moving to a stairs tile
+            nextFloor(); //send player to the next floor
+            break;
+        case LOOT_TILE: //when moving to a loot tile
+            allTiles[positionY][positionX] = BASIC_TILE; //replace old tile
+            positionX = xTile; //set new position
+            positionY = yTile;
+            allTiles[positionY][positionX] = CHARACTER_TILE; //set player to new tile
+            loot(); //give player loot
+            updateWindow(); //update to user
+            break;
+        case ENEMY_TILE: //when moving to an enemy tile
+            allTiles[positionY][positionX] = BASIC_TILE; //reset old tile
+            positionX = xTile; //set new position
+            positionY = yTile;
+            for (int i = 0; i < 10; i++) {
+                if (enemies[i] != NULL) { //make sure there is an enemy to prevent null pointer
+                    if (enemies[i]->xPos == positionX &&
+                        enemies[i]->yPos == positionY) { //find which enemy died
+                        (*enemies[i]).attacked = true; //"delete" enemy by marking them attacked
+                    }
+                }
+            }
+            allTiles[positionY][positionX] = CHARACTER_TILE;
+            updateWindow(); //make sure window updates
+    }
+    if (movesLeft <= 0) { //automatically set next turn when the player can not do anything else
+        nextTurn();
+    }
 }
 
 void startup() {
