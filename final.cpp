@@ -2,14 +2,15 @@
 //Crawl The Dungeon mega file
 #include <string>
 #include <iostream>
-#include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <ctime>
 #include "Room_List.cpp"
 #include "Soldier.cpp"
-//enum to keep track of which value corresponds with each tile type
 
+//enum to keep track of which value corresponds with each tile type
+const int windowHeight = 720;
+const int windowWidth = 1280;
 const int tileX = 20; //the x length of tiles
 const int tileY = 20; //the y length of tiles
 SDL_Window *myWindow = NULL;
@@ -18,6 +19,7 @@ SDL_Surface *allSurfaces[34][60]; //an array of all the surfaces
 SDL_Surface *curSurface[9]; //an array of all loaded surfaces
 SDL_Surface *surfaceWithData = NULL;
 SDL_Surface *background;
+SDL_Surface *menu;
 int positionX = 1; //position (x) of the character
 int positionY = 1; //position (y) of the character
 Character mainChar; //the main character
@@ -43,24 +45,72 @@ void startup();
 
 void characterMove(char move);
 
-void nextFloor();
-
 void loot();
 
 void updateWindow();
 
 void updateHealth();
 
+void makeMenu();
+
+void startGame();
+
+void startMenu();
+
 bool done = false;
 using namespace std;
 
 int main(int argv, char *args[]) {
-    mapMaker(allTiles);
     startup();
+}
+
+void startMenu() {
+    int x;
+    int y;
+    SDL_BlitSurface(menu, NULL, surfaceWithData, NULL);
+    SDL_Event eventObject;
+    SDL_UpdateWindowSurface(myWindow);
+    while (!done) {
+        while (SDL_PollEvent(&eventObject)) {
+            if (eventObject.type == SDL_QUIT) {
+                done = true;
+            } else if (eventObject.type == SDL_MOUSEBUTTONDOWN) {
+                switch (eventObject.button.button) {
+                    case SDL_BUTTON_LEFT:
+                        SDL_GetMouseState(&x, &y);
+                        if (x >= 575 && x <= 700 && y >= 215 && y <= 270) {
+                            startGame();
+                        }
+                        break;
+                }
+            }
+        }
+    }
+}
+
+void makeMenu() {
+    cout << "HELLO" << endl;
+    SDL_Surface *mainText;
+    SDL_Surface *startText;
+    menu = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/background.png");;
+    startText = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/startText.png");
+    cout << SDL_GetError() << "LOL" << endl;
+    mainText = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/mainText.png");
+    SDL_Rect rect;
+    rect.x = (windowWidth - mainText->w) / 2;
+    rect.y = 10;
+    SDL_BlitSurface(mainText, NULL, menu, &rect);
+    rect.x = (windowWidth - startText->w) / 2;
+    rect.y = 200;
+    SDL_BlitSurface(startText, nullptr, menu, &rect);
+}
+
+void startGame() {
+    mapMaker(allTiles);
     //event loop
+    updateWindow();
     SDL_Event eventObject;
     while (!done) {
-
         while (SDL_PollEvent(&eventObject)) {
             if (eventObject.type == SDL_QUIT) {
                 done = true;
@@ -140,11 +190,11 @@ void characterMove(char move) { //character turn to move
             allTiles[positionY][positionX] = BASIC_TILE; //reset old tile
             positionX = xTile; //set new position
             positionY = yTile;
-            for (int i = 0; i < 10; i++) {
-                if (enemies[i] != NULL) { //make sure there is an enemy to prevent null pointer
-                    if (enemies[i]->xPos == positionX &&
-                        enemies[i]->yPos == positionY) { //find which enemy died
-                        (*enemies[i]).attacked = true; //"delete" enemy by marking them attacked
+            for (auto &enemy : enemies) {
+                if (enemy != nullptr) { //make sure there is an enemy to prevent null pointer
+                    if (enemy->xPos == positionX &&
+                        enemy->yPos == positionY) { //find which enemy died
+                        (*enemy).attacked = true; //"delete" enemy by marking them attacked
                     }
                 }
             }
@@ -157,12 +207,13 @@ void characterMove(char move) { //character turn to move
 }
 
 void startup() {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         std::cout << "panic sdl failed";
         exit(1);
     }
     IMG_Init(IMG_INIT_PNG);
-    myWindow = SDL_CreateWindow("Crawl the Dungeon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720,
+    myWindow = SDL_CreateWindow("Crawl the Dungeon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth,
+                                windowHeight,
                                 SDL_WINDOW_SHOWN);//the main window
     surfaceWithData = SDL_GetWindowSurface(myWindow);
     curSurface[BASIC_TILE] = IMG_Load(
@@ -183,7 +234,8 @@ void startup() {
             allSurfaces[i][x] = curSurface[allTiles[i][x]];
         }
     }
-    updateWindow();
+    makeMenu();
+    startMenu();
 }
 
 void updateWindow() {
@@ -255,11 +307,11 @@ void nextTurn() { //ends character turn and allows enemies to move
 }
 
 void enemyMove() { //makes all enemies move
-    for (int i = 0; i < 10; i++) {
-        if (enemies[i] != NULL) {
-            if (abs(enemies[i]->xPos - positionX) < 7 && abs(enemies[i]->yPos - positionY) < 7) {
-                (*enemies[i]).move(positionX, positionY, allTiles,
-                                   &mainChar); //allows the enmies to move around and attack
+    for (auto &enemy : enemies) {
+        if (enemy != nullptr) {
+            if (abs(enemy->xPos - positionX) < 7 && abs(enemy->yPos - positionY) < 7) {
+                (*enemy).move(positionX, positionY, allTiles,
+                              &mainChar); //allows the enmies to move around and attack
             }
         }
     }
@@ -279,6 +331,7 @@ void quit() {
     SDL_FreeSurface(curSurface[5]);
     SDL_FreeSurface(curSurface[6]);
     SDL_FreeSurface(curSurface[7]);
+    SDL_FreeSurface(curSurface[8]);
     SDL_FreeSurface(surfaceWithData);
     SDL_DestroyWindow(myWindow);
     SDL_Quit();
@@ -291,7 +344,7 @@ void gameOver() { //when the player dies (no health or movement (can not die fro
     endMessage += " floor(s)";
 
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Game Over", endMessage.c_str(), NULL); //display the message
-    done = true; //end the event loop to end the game
+    startMenu();
 }
 
 void mapMaker(int tileMap[34][60]) {

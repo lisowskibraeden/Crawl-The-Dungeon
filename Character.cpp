@@ -1,7 +1,4 @@
 //Author: Braeden Lisowski
-//Due Date: 5/06/2019
-//Instructor: Alexi Brooks
-//Final Project
 
 class Character{ //main character class
     public:
@@ -33,9 +30,3 @@ class Character{ //main character class
         }
     }
 };
-
-
-
-
-
-
