@@ -8,7 +8,7 @@ const int windowWidth = 1280;
 const int tileX = 20; //the x length of tiles
 const int tileY = 20; //the y length of tiles
 SDL_Window *myWindow = nullptr;
-SDL_Surface *curSurface[9]; //an array of all loaded surfaces
+SDL_Surface *curSurface[9]; //an vector of all loaded surfaces
 SDL_Surface *surfaceWithData = nullptr;
 SDL_Surface *background;
 SDL_Surface *menu;
@@ -101,6 +101,7 @@ void startup() {
     SDL_SetWindowIcon(myWindow, IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/mainChar.png"));
     makeMenu();
     startMenu();
+
 }
 
 void quit() {

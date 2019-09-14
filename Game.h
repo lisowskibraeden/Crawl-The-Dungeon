@@ -8,11 +8,12 @@
 #include "Soldier.h"
 #include "Room_List.cpp"
 #include <ctime>
-
+#include <unordered_map>
 using namespace std;
 
 class Game {
 private:
+
     bool done = false;
     int tileX;
     int tileY;
@@ -27,11 +28,7 @@ private:
     int positionY = 1; //position (y) of the character
     Character mainChar; //the main character
     Soldier *enemies[10]; //all of the enemies
-public:
     int floorsTraveled = 1; //how many floors traveled
-    Game(SDL_Window *myWindow, SDL_Surface *surfaceWithData, SDL_Surface *background, int tileX, int tileY);
-
-    bool startGame();
 
     void nextFloor();
 
@@ -52,6 +49,11 @@ public:
     void mapMaker(int tileMap[34][60]);
 
     void updateWindow();
+
+public:
+    bool startGame();
+
+    Game(SDL_Window *myWindow, SDL_Surface *surfaceWithData, SDL_Surface *background, int tileX, int tileY);
 };
 
 

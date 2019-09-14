@@ -22,15 +22,14 @@ Game::Game(SDL_Window *myWindow, SDL_Surface *surfaceWithData, SDL_Surface *back
     srand(time(nullptr)); //make sure random works correctly
     for (int i = 0; i < 10; ++i) {
         for (int x = 0; x < 10; ++x) { //set up the maps
-            allSurfaces[i][x] = curSurface[allTiles[i][x]];
+            allSurfaces[i][x] = (curSurface[allTiles[i][x]]);
         }
     }
 }
 
-
 bool Game::startGame() {
     mapMaker(allTiles);
-    //event loop
+    mainChar = Character();
     updateWindow();
     SDL_Event eventObject;
     while (!done) {
@@ -139,7 +138,8 @@ void Game::updateWindow() {
         dest.y = dest.y + tileY; //update each time
         dest.x = 0; //reset each time
         for (int x = 0; x < 60; ++x) { //run accross columns
-            allSurfaces[i][x] = curSurface[allTiles[i][x]]; //load in the texture for each tile
+            allSurfaces[i][x] = (curSurface[allTiles[i][x]]); //load in the texture for each tile
+            printf(SDL_GetError());
             SDL_BlitSurface(allSurfaces[i][x], NULL, surfaceWithData, &dest); //add the texture to the window
             dest.x = dest.x + tileX; //increment x to go across columns
 
@@ -177,17 +177,17 @@ void Game::updateMovement() { //displays character movement stat
     dest.x = 1000; //location for the movement icons to display
     dest.y = 700;
     for (int i = 0; i < mainChar.movement; i++) { //add in for each icon
-        SDL_BlitSurface(curSurface[MOVEMENT_ICON], NULL, surfaceWithData, &dest);
+        SDL_BlitSurface((curSurface[MOVEMENT_ICON]), NULL, surfaceWithData, &dest);
         dest.x = dest.x - 20; //move across columns to display each icon
     }
 }
 
 void Game::updateHealth() { //displays the character health stat
     SDL_Rect dest;
-    dest.x = 0; //loaction for the health icon to display
+    dest.x = 0; //location for the health icon to display
     dest.y = 685;
     for (int i = 0; i < mainChar.health; i++) { //run fo reach health value
-        SDL_BlitSurface(curSurface[HEALTH_ICON], NULL, surfaceWithData, &dest);
+        SDL_BlitSurface((curSurface[HEALTH_ICON]), NULL, surfaceWithData, &dest);
         dest.x = dest.x + 35; //go across to display all health
     }
 }
