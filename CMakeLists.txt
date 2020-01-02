@@ -11,10 +11,17 @@ set(SDL2_IMAGE_INCLUDE_DIRS Lib/SDL2_image-2.0.2/include/)
 
 set(SDL2_LIBPATH "${CMAKE_CURRENT_LIST_DIR}/Libs/SDL2-2.0.7/lib/${ARCH}/")
 set(SDL2_IMAGE_LIBPATH "${CMAKE_CURRENT_LIST_DIR}/Libs/SDL2_image-2.0.2/lib/${ARCH}/")
-find_library(SDL2_LIB SDL2 PATH ${SDL2_LIBPATH})
-find_library(SDL2_MAIN_LIB SDL2main PATH ${SDL2_LIBPATH})
+
+if(UNIX)
+    find_library(SDL2IMAGE_LIBRARIES SDL2_image PATH ${SDL2_IMAGE_LIBPATH})
+    find_library(SDL2_LIB SDL2 PATH ${SDL2_LIBPATH})
+    find_library(SDL2_MAIN_LIB SDL2main PATH ${SDL2_LIBPATH})
+else()
+    set(SDL2IMAGE_LIBRARIES libs/SDL2_image-2.0.2/lib/x64/SDL2_image.dll)
+    set(SDL2_LIB libs/SDL2-2.0.7/lib/x64/SDL2.dll)
+endif()
+
 set(SDL2_LIBRARIES ${SDL2_LIB} ${SDL2_MAIN_LIB})
-find_library(SDL2IMAGE_LIBRARIES SDL2_image PATH ${SDL2_IMAGE_LIBPATH})
 
 add_definitions(-DSDL_MAIN_HANDLED)
 # Add executable target with source files listed in SOURCE_FILES variable
