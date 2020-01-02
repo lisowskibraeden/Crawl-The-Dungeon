@@ -10,16 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run_CMake
-      env:
-        CC: ${{ matrix.compiler }}  
-        SDL2_DIR: Libs/SDL2-2.0.7
       run: |
-        sudo apt-get update -qq
-        sudo apt-get install -qq cppcheck
-        sudo apt-get install -qq libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
         cmake .
         cmake --build .
     - uses: actions/upload-artifact@v1
       with:
-        name: Crawl-The-Dungeon
-        path: /home/runner/work/Crawl-The-Dungeon
+        name: crawl_the_dungeon
+        path: /home/runner/work/Crawl-The-Dungeon/Crawl-The-Dungeon
