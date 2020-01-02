@@ -21,7 +21,7 @@ else()
     set(SDL2_LIB libs/SDL2-2.0.7/lib/x64/SDL2.dll)
     set(SDL2_MAIN_LIB libs/SDL2-2.0.7/lib/x64//libSDL2main.a)
     set(SDL2_LIB_LIB libs/SDL2-2.0.7/lib/x64/libSDL2.dll.a)
-    include_directores(SDL2_INCLUDE_DIRS)
+    include_directories(SDL2_INCLUDE_DIRS)
 endif()
 
 set(SDL2_LIBRARIES ${SDL2_LIB} ${SDL2_MAIN_LIB} ${SDL2_LIB_LIB})
