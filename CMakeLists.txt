@@ -19,6 +19,7 @@ if(UNIX)
 else()
     set(SDL2IMAGE_LIBRARIES libs/SDL2_image-2.0.2/lib/x64/SDL2_image.dll)
     set(SDL2_LIB libs/SDL2-2.0.7/lib/x64/SDL2.dll)
+    set(SDL2_MAIN_LIB libs/SDL2-2.0.7/lib/x64//libSDL2main.a)
 endif()
 
 set(SDL2_LIBRARIES ${SDL2_LIB} ${SDL2_MAIN_LIB})
