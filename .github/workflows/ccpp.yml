@@ -9,7 +9,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Run CMake
+    - name: Run_CMake
       env:
         CC: ${{ matrix.compiler }}  
         SDL2_DIR: Libs/SDL2-2.0.7
