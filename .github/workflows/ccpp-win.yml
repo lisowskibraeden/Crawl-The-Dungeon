@@ -15,5 +15,5 @@ jobs:
         cmake --build .
     - uses: actions/upload-artifact@v1
       with:
-        name: crawl_the_dungeon.exe
-        path: D:\a\Crawl-The-Dungeon\Crawl-The-Dungeon\Debug\
+        name: Crawl-The-Dungeon
+        path: D:\a\Crawl-The-Dungeon\
