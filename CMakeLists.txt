@@ -20,12 +20,12 @@ add_definitions(-DSDL_MAIN_HANDLED)
 # Add executable target with source files listed in SOURCE_FILES variable
 add_executable(crawl_the_dungeon ${SOURCE_FILES})
 
-target_link_libraries(
+target_link_libraries(crawl_the_dungeon
     ${PROJECT_NAME} 
     ${SDL2_LIBRARIES}
     ${SDL2IMAGE_LIBRARIES}
 )
-target_include_directories(
+target_include_directories(crawl_the_dungeon
     ${SDL2_INCLUDE_DIRS}
     ${SDL2_IMAGE_INCLUDE_DIRS}
 )
