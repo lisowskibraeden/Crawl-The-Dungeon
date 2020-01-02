@@ -21,7 +21,6 @@ add_definitions(-DSDL_MAIN_HANDLED)
 add_executable(crawl_the_dungeon ${SOURCE_FILES})
 
 target_link_libraries(crawl_the_dungeon
-    ${PROJECT_NAME} 
     ${SDL2_LIBRARIES}
     ${SDL2IMAGE_LIBRARIES}
 )
