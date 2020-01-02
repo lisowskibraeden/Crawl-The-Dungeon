@@ -20,9 +20,10 @@ else()
     set(SDL2IMAGE_LIBRARIES libs/SDL2_image-2.0.2/lib/x64/SDL2_image.dll)
     set(SDL2_LIB libs/SDL2-2.0.7/lib/x64/SDL2.dll)
     set(SDL2_MAIN_LIB libs/SDL2-2.0.7/lib/x64//libSDL2main.a)
+    set(SDL2_LIB_LIB libs/SDL2-2.0.7/lib/x64/libSDL2.dll.a)
 endif()
 
-set(SDL2_LIBRARIES ${SDL2_LIB} ${SDL2_MAIN_LIB})
+set(SDL2_LIBRARIES ${SDL2_LIB} ${SDL2_MAIN_LIB} ${SDL2_LIB_LIB})
 
 add_definitions(-DSDL_MAIN_HANDLED)
 # Add executable target with source files listed in SOURCE_FILES variable
