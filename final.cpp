@@ -3,8 +3,8 @@
 #include <string>
 #include <iostream>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include <ctime>
 #include "Room_List.cpp"
 #include "Soldier.cpp"
