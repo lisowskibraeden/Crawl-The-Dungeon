@@ -26,6 +26,7 @@ endif()
 set(SDL2_LIBRARIES ${SDL2_LIB} ${SDL2_MAIN_LIB} ${SDL2_LIB_LIB})
 
 add_definitions(-DSDL_MAIN_HANDLED)
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc")
 # Add executable target with source files listed in SOURCE_FILES variable
 add_executable(crawl_the_dungeon ${SOURCE_FILES})
 
