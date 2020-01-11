@@ -64,7 +64,6 @@ void refreshMenu() {
 }
 
 void makeMenu() {
-    cout << "HELLO" << endl;
     SDL_Surface *mainText;
     SDL_Surface *startText;
     menu = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/background.png");;
@@ -82,7 +81,7 @@ void makeMenu() {
 void startGame() {
     Game *game = new Game(myWindow, surfaceWithData, background, tileX, tileY);
     game->startGame();
-    delete (game);
+    free(game);
 }
 
 void showHighScore() {

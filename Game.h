@@ -2,8 +2,8 @@
 #define CRAWL_THE_DUNGEON_GAME_H
 
 #include "Character.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include <string>
 #include "Soldier.h"
 #include "Room_List.cpp"

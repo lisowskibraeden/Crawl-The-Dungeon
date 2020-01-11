@@ -2,6 +2,7 @@
 // Created by Braeden on 9/3/2019.
 //
 
+#include <iostream>
 #include "Game.h"
 
 Game::Game(SDL_Window *myWindow, SDL_Surface *surfaceWithData, SDL_Surface *background, int tileX, int tileY) {
@@ -137,9 +138,8 @@ void Game::updateWindow() {
     for (int i = 0; i < 34; ++i) { //run down rows
         dest.y = dest.y + tileY; //update each time
         dest.x = 0; //reset each time
-        for (int x = 0; x < 60; ++x) { //run accross columns
+        for (int x = 0; x < 60; x++) { //run accross columns
             allSurfaces[i][x] = (curSurface[allTiles[i][x]]); //load in the texture for each tile
-            printf(SDL_GetError());
             SDL_BlitSurface(allSurfaces[i][x], NULL, surfaceWithData, &dest); //add the texture to the window
             dest.x = dest.x + tileX; //increment x to go across columns
 

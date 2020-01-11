@@ -3,7 +3,7 @@ project(crawl_the_dungeon)
 set(CMAKE_CXX_STANDARD 14)            # Enable c++14 standard
 
 # Add main.cpp file of project root directory as source file
-set(SOURCE_FILES final.cpp Soldier.cpp TilesEnum.cpp)
+set(SOURCE_FILES final.cpp Soldier.cpp TilesEnum.cpp Game.cpp Game.h Character.cpp Character.h)
 
 
 set(SDL2_INCLUDE_DIRS       "${CMAKE_CURRENT_LIST_DIR}/libs/SDL2-2.0.7/include/")
