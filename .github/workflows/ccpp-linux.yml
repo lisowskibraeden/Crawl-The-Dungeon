@@ -1,0 +1,22 @@
+name: Linux Build
+
+on: [push]
+
+jobs:
+  build: 
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run_CMake
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -qq cppcheck
+        sudo apt-get install -qq libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+        cmake .
+        cmake --build .
+    - uses: actions/upload-artifact@v1
+      with:
+        name: crawl_the_dungeon
+        path: /home/runner/work/Crawl-The-Dungeon/Crawl-The-Dungeon
