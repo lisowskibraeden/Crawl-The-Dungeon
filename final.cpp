@@ -69,7 +69,6 @@ int main(int argv, char *args[]) {
             if (eventObject.type == SDL_QUIT) {
                 done = true;
             } else if (eventObject.type == SDL_MOUSEBUTTONDOWN) {
-                cout << mainChar.health << endl;
                 switch (eventObject.button.button) {
                     case SDL_BUTTON_LEFT:  //on left click
                         SDL_GetMouseState(&x, &y);
@@ -258,7 +257,6 @@ void enemyMove() { //makes all enemies move
         }
     }
     updateWindow();
-    cout << mainChar.health << endl;
     if (mainChar.dead) {
         gameOver();
     }

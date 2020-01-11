@@ -30,6 +30,10 @@ set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc")
 # Add executable target with source files listed in SOURCE_FILES variable
 add_executable(crawl_the_dungeon ${SOURCE_FILES})
 
+set_property(GLOBAL PROPERTY MSVC_RUNTIME_LIBRARY MutliThreaded)
+
+target_link_options(crawl_the_dungeon PRIVATE -mwindows)
+
 target_link_libraries(crawl_the_dungeon
     ${SDL2_LIBRARIES}
     ${SDL2IMAGE_LIBRARIES}
