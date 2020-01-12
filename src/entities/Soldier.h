@@ -6,7 +6,7 @@
 #define CRAWL_THE_DUNGEON_SOLDIER_H
 
 #include "Character.h"
-#include "TilesEnum.cpp"
+#include "../enums/TilesEnum.cpp"
 #include <cmath>
 
 class Soldier {

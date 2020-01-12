@@ -1,12 +1,12 @@
 #ifndef CRAWL_THE_DUNGEON_GAME_H
 #define CRAWL_THE_DUNGEON_GAME_H
 
-#include "Character.h"
+#include "entities/Character.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
-#include "Soldier.h"
-#include "Room_List.cpp"
+#include "entities/Soldier.h"
+#include "enums/Room_List.cpp"
 #include <ctime>
 #include <unordered_map>
 using namespace std;
