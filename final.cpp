@@ -2,8 +2,8 @@
 //Crawl The Dungeon mega file
 #include <string>
 #include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <ctime>
 #include "Room_List.cpp"
 #include "Soldier.cpp"
@@ -57,19 +57,19 @@ int main(int argv, char *args[]) {
     //initializations
     int x;
     int y;
-
+    std::cout << "heello wooorld" << std::endl;
     mapMaker(allTiles);
     startup();
     //event loop
     SDL_Event eventObject;
     while (!done) {
-
         while (SDL_PollEvent(&eventObject)) {
             if (eventObject.type == SDL_QUIT) {
                 done = true;
             } else if (eventObject.type == SDL_MOUSEBUTTONDOWN) {
                 switch (eventObject.button.button) {
                     case SDL_BUTTON_LEFT:  //on left click
+                        cout << "debug" << endl;
                         SDL_GetMouseState(&x, &y);
                         characterMove(x, y); //try to move the player
                         break;
@@ -80,6 +80,8 @@ int main(int argv, char *args[]) {
                         nextTurn(); //send to next turn
                         break;
                 }
+            } else if (eventObject.window.event == SDL_WINDOWEVENT_EXPOSED) {
+                updateWindow();
             }
         }
     }
@@ -93,12 +95,14 @@ void nextFloor() { //send the player to the next floor
 }
 
 void characterMove(int x, int y) { //character turn to move
+    cout << x << " " << y << endl;
     int xTile = x / tileX; //finds what tile the player clicked on
     int yTile = y / tileY;
     if (((abs((yTile - positionY)) <= movesLeft) && ((xTile - positionX) == 0)) ||
         ((abs((xTile - positionX)) <= movesLeft) &&
          ((yTile - positionY) == 0))) { //checks to see if the player clicked on a tile they can move to
         if (xTile == positionX && yTile == positionY) { //you can not move to your own tile (hit return to end turn)
+            cout << "here" << endl;
             //do nothing
         } else {
             movesLeft -= abs((yTile - positionY));
@@ -149,24 +153,23 @@ void characterMove(int x, int y) { //character turn to move
 }
 
 void startup() {
+    std::cout << "hello world" << endl;
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "panic sdl failed";
         exit(1);
     }
     IMG_Init(IMG_INIT_PNG);
-    myWindow = SDL_CreateWindow("Crawl the Dungeon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720,
-                                SDL_WINDOW_SHOWN);//the main window
+    myWindow = SDL_CreateWindow("Crawl the Dungeon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_SHOWN);//the main window
     surfaceWithData = SDL_GetWindowSurface(myWindow);
-    curSurface[BASIC_TILE] = IMG_Load(
-            "C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/basictiles.png"); //load in all textures
-    curSurface[LAVA_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/lava.png");
-    curSurface[CHARACTER_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/mainChar.png");
-    curSurface[HEALTH_ICON] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/heart.png");
-    curSurface[ENEMY_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/slime.png");
-    curSurface[LOOT_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/loot.png");
-    background = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/background.png");
-    curSurface[MOVEMENT_ICON] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/movement.png");
-    curSurface[STAIRS_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/stairs.png");
+    curSurface[BASIC_TILE] = IMG_Load("./resources/basictiles.png"); //load in all textures
+    curSurface[LAVA_TILE] = IMG_Load("./resources/lava.png");
+    curSurface[CHARACTER_TILE] = IMG_Load("./resources/mainChar.png");
+    curSurface[HEALTH_ICON] = IMG_Load("./resources/heart.png");
+    curSurface[ENEMY_TILE] = IMG_Load("./resources/slime.png");
+    curSurface[LOOT_TILE] = IMG_Load("./resources/loot.png");
+    background = IMG_Load("./resources/background.png");
+    curSurface[MOVEMENT_ICON] = IMG_Load("./resources/movement.png");
+    curSurface[STAIRS_TILE] = IMG_Load("./resources/stairs.png");
     SDL_SetWindowIcon(myWindow, curSurface[CHARACTER_TILE]);
     srand(time(NULL)); //make sure random works correctly
 
@@ -175,6 +178,7 @@ void startup() {
             allSurfaces[i][x] = curSurface[allTiles[i][x]];
         }
     }
+    std::cout << "hello world" << endl << IMG_GetError() << endl << SDL_GetError() << endl;
     updateWindow();
 }
 
@@ -182,21 +186,32 @@ void updateWindow() {
     SDL_Rect dest;
     dest.x = 0; //set up in the corner of the window
     dest.y = 0;
+    dest.w = 20;
+    dest.h = 20;
     SDL_BlitSurface(background, NULL, surfaceWithData, NULL); //reset background to clear screen
+    SDL_BlitSurface(background, NULL, surfaceWithData, &dest); //reset background to clear screen
+    std::cout << "ooo" << SDL_GetError() << std::endl;
     dest.y = -1 * tileY;
     for (int i = 0; i < 34; ++i) { //run down rows
         dest.y = dest.y + tileY; //update each time
         dest.x = 0; //reset each time
         for (int x = 0; x < 60; ++x) { //run accross columns
             allSurfaces[i][x] = curSurface[allTiles[i][x]]; //load in the texture for each tile
+            if(allSurfaces[i][x] == 0) {
+                dest.x = dest.x + tileX;
+                continue;
+            }
             SDL_BlitSurface(allSurfaces[i][x], NULL, surfaceWithData, &dest); //add the texture to the window
             dest.x = dest.x + tileX; //increment x to go across columns
-
+            std::cout << i << " " << x << " " << " " << allTiles[i][x] << " " << SDL_GetError() << dest.y << " " << dest.x << endl;
         }
     }
+    std::cout << "hello world" << std::endl;
     updateHealth(); //display health
     updateMovement(); //display movement
+    std::cout << "hello world23" << SDL_GetError() << std::endl;
     SDL_UpdateWindowSurface(myWindow); //finally send to window
+    std::cout << "testworld" << SDL_GetError() << std::endl;
 }
 
 void loot() { //player gains loot
