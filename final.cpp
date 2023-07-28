@@ -57,7 +57,6 @@ int main(int argv, char *args[]) {
     //initializations
     int x;
     int y;
-    std::cout << "heello wooorld" << std::endl;
     mapMaker(allTiles);
     startup();
     //event loop
@@ -69,7 +68,6 @@ int main(int argv, char *args[]) {
             } else if (eventObject.type == SDL_MOUSEBUTTONDOWN) {
                 switch (eventObject.button.button) {
                     case SDL_BUTTON_LEFT:  //on left click
-                        cout << "debug" << endl;
                         SDL_GetMouseState(&x, &y);
                         characterMove(x, y); //try to move the player
                         break;
@@ -95,14 +93,12 @@ void nextFloor() { //send the player to the next floor
 }
 
 void characterMove(int x, int y) { //character turn to move
-    cout << x << " " << y << endl;
     int xTile = x / tileX; //finds what tile the player clicked on
     int yTile = y / tileY;
     if (((abs((yTile - positionY)) <= movesLeft) && ((xTile - positionX) == 0)) ||
         ((abs((xTile - positionX)) <= movesLeft) &&
          ((yTile - positionY) == 0))) { //checks to see if the player clicked on a tile they can move to
         if (xTile == positionX && yTile == positionY) { //you can not move to your own tile (hit return to end turn)
-            cout << "here" << endl;
             //do nothing
         } else {
             movesLeft -= abs((yTile - positionY));
@@ -153,7 +149,6 @@ void characterMove(int x, int y) { //character turn to move
 }
 
 void startup() {
-    std::cout << "hello world" << endl;
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "panic sdl failed";
         exit(1);
@@ -178,7 +173,6 @@ void startup() {
             allSurfaces[i][x] = curSurface[allTiles[i][x]];
         }
     }
-    std::cout << "hello world" << endl << IMG_GetError() << endl << SDL_GetError() << endl;
     updateWindow();
 }
 
@@ -190,7 +184,6 @@ void updateWindow() {
     dest.h = 20;
     SDL_BlitSurface(background, NULL, surfaceWithData, NULL); //reset background to clear screen
     SDL_BlitSurface(background, NULL, surfaceWithData, &dest); //reset background to clear screen
-    std::cout << "ooo" << SDL_GetError() << std::endl;
     dest.y = -1 * tileY;
     for (int i = 0; i < 34; ++i) { //run down rows
         dest.y = dest.y + tileY; //update each time
@@ -203,15 +196,11 @@ void updateWindow() {
             }
             SDL_BlitSurface(allSurfaces[i][x], NULL, surfaceWithData, &dest); //add the texture to the window
             dest.x = dest.x + tileX; //increment x to go across columns
-            std::cout << i << " " << x << " " << " " << allTiles[i][x] << " " << SDL_GetError() << dest.y << " " << dest.x << endl;
         }
     }
-    std::cout << "hello world" << std::endl;
     updateHealth(); //display health
     updateMovement(); //display movement
-    std::cout << "hello world23" << SDL_GetError() << std::endl;
     SDL_UpdateWindowSurface(myWindow); //finally send to window
-    std::cout << "testworld" << SDL_GetError() << std::endl;
 }
 
 void loot() { //player gains loot
