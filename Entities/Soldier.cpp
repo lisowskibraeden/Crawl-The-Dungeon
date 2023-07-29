@@ -1,5 +1,5 @@
 #include <cmath>
-#include "../TilesEnum.cpp"
+#include "../Map_Gen/Tiles_Enum.cpp"
 #include "Enemy.h"
 
 class Soldier: public Enemy {

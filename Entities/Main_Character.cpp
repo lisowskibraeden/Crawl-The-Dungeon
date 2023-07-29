@@ -5,10 +5,10 @@
 
 #include "Character.h"
 
-class MainCharacter: public Character { //main character class
+class Main_Character: public Character { //main character class
     public:
         bool dead = false;
-        MainCharacter(){
+        Main_Character(){
             health = 3; //starting health and movement
             movement = 1;
         }

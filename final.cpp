@@ -5,9 +5,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <ctime>
-#include "Room_List.cpp"
+#include "./Map_Gen/Room_List.cpp"
 #include "Entities/Soldier.cpp"
-#include "Entities/MainCharacter.cpp"
+#include "Entities/Main_Character.cpp"
 //enum to keep track of which value corresponds with each tile type
 
 const int tileX = 20; //the x length of tiles
@@ -20,7 +20,7 @@ SDL_Surface *surfaceWithData = NULL;
 SDL_Surface *background;
 int positionX = 1; //position (x) of the character
 int positionY = 1; //position (y) of the character
-MainCharacter mainChar; //the main character
+Main_Character mainChar; //the main character
 int movesLeft = mainChar.movement; //how many moves left in the current turn
 Soldier *enemies[10]; //all of the enemies
 int floorsTraveled = 1; //how many floors traveled
