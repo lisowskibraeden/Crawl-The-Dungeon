@@ -7,8 +7,8 @@ FILE_OUT := crawl.out
 
 
 build: clean
-	g++ $(SOURCES) $(LIBRARIES)  -w $(INCLUDEFLAGS) -o $(FILE_OUT)
+	g++ $(SOURCES) $(LIBRARIES)  -w $(INCLUDEFLAGS) -o ./$(FILE_OUT)
 run: build
 	./$(FILE_OUT)
 clean: 
-	rm -rf $(FILE_OUT)
+	rm -rf ./$(FILE_OUT)
