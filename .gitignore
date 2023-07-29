@@ -1,4 +1,2 @@
-cmake-build-debug/*
-cmakefiles/
-cmakecache.txt
 *.out
+.vscode

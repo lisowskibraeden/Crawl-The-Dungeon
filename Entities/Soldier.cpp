@@ -1,14 +1,9 @@
 #include <cmath>
-#include "TilesEnum.cpp"
-#include "Character.cpp"
+#include "../TilesEnum.cpp"
+#include "Enemy.h"
 
-class Soldier {
+class Soldier: public Enemy {
 public:
-    bool attacked = false;
-    int movement;
-    int xPos;
-    int yPos;
-
     Soldier(int x, int y) {
         xPos = x;
         yPos = y;
@@ -28,8 +23,7 @@ public:
     void move(int positionX, int positionY, int allTiles[34][60], Character *mainChar) {
         if (!attacked) { //make sure the enemy hasn't attacked
             for (int i = movement; i > 0; i--) {
-                if (abs(xPos - positionX) >= abs(yPos -
-                                                 positionY)) {//basic AI essentially if the player is more horizontally further go horizontal otherwise go vertical
+                if (abs(xPos - positionX) >= abs(yPos - positionY)) {//basic AI essentially if the player is more horizontally further go horizontal otherwise go vertical
                     if (xPos - positionX > 0) {
                         if (!moveR(positionX, positionY, allTiles)) {
                             findNextMove(positionX, positionY, allTiles, 'R');

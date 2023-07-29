@@ -1,6 +1,14 @@
-build:
-	g++ *.cpp -lSDL2 -lSDL2_image -lSDL2_ttf -w -o crawl.out
+SOURCES := $(shell find . -name "*.cpp")
+HEADERS := $(shell find . -name "*.hpp")
+HEADERDIRS := $(sort $(dir $(HEADERS)))
+INCLUDEFLAGS := $(addprefix -I,$(HEADERDIRS))
+LIBRARIES := -lSDL2 -lSDL2_image -lSDL2_ttf
+FILE_OUT := crawl.out
+
+
+build: clean
+	g++ $(SOURCES) $(LIBRARIES)  -w $(INCLUDEFLAGS) -o $(FILE_OUT)
 run: build
-	./crawl.out
+	./$(FILE_OUT)
 clean: 
-	rm -rf *.out
+	rm -rf $(FILE_OUT)

@@ -6,7 +6,8 @@
 #include <SDL2/SDL_image.h>
 #include <ctime>
 #include "Room_List.cpp"
-#include "Soldier.cpp"
+#include "Entities/Soldier.cpp"
+#include "Entities/MainCharacter.cpp"
 //enum to keep track of which value corresponds with each tile type
 
 const int tileX = 20; //the x length of tiles
@@ -19,7 +20,7 @@ SDL_Surface *surfaceWithData = NULL;
 SDL_Surface *background;
 int positionX = 1; //position (x) of the character
 int positionY = 1; //position (y) of the character
-Character mainChar; //the main character
+MainCharacter mainChar; //the main character
 int movesLeft = mainChar.movement; //how many moves left in the current turn
 Soldier *enemies[10]; //all of the enemies
 int floorsTraveled = 1; //how many floors traveled
@@ -180,8 +181,6 @@ void updateWindow() {
     SDL_Rect dest;
     dest.x = 0; //set up in the corner of the window
     dest.y = 0;
-    dest.w = 20;
-    dest.h = 20;
     SDL_BlitSurface(background, NULL, surfaceWithData, NULL); //reset background to clear screen
     SDL_BlitSurface(background, NULL, surfaceWithData, &dest); //reset background to clear screen
     dest.y = -1 * tileY;
@@ -193,6 +192,8 @@ void updateWindow() {
             if(allSurfaces[i][x] == 0) {
                 dest.x = dest.x + tileX;
                 continue;
+            } else if (allTiles[i][x] == CHARACTER_TILE || allTiles[i][x] == ENEMY_TILE || allTiles[i][x] == LOOT_TILE) {
+                SDL_BlitSurface(curSurface[BASIC_TILE], NULL, surfaceWithData, &dest);
             }
             SDL_BlitSurface(allSurfaces[i][x], NULL, surfaceWithData, &dest); //add the texture to the window
             dest.x = dest.x + tileX; //increment x to go across columns
@@ -254,8 +255,7 @@ void enemyMove() { //makes all enemies move
     for (int i = 0; i < 10; i++) {
         if (enemies[i] != NULL) {
             if (abs(enemies[i]->xPos - positionX) < 7 && abs(enemies[i]->yPos - positionY) < 7) {
-                (*enemies[i]).move(positionX, positionY, allTiles,
-                                   &mainChar); //allows the enmies to move around and attack
+                (*enemies[i]).move(positionX, positionY, allTiles, &mainChar); //allows the enmies to move around and attack
             }
         }
     }
