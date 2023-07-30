@@ -22,6 +22,7 @@ Game::Game(SDL_Window *myWindow, SDL_Surface *surfaceWithData, SDL_Surface *back
     curSurface[STAIRS_TILE] = IMG_Load("./resources/stairs.png");
     srand(time(nullptr)); //make sure random works correctly
     mapMaker(allTiles);
+    this->mainChar = Main_Character();
     for (int i = 0; i < 10; ++i) {
         for (int x = 0; x < 10; ++x) { //set up the maps
             allSurfaces[i][x] = curSurface[allTiles[i][x]];
@@ -30,7 +31,6 @@ Game::Game(SDL_Window *myWindow, SDL_Surface *surfaceWithData, SDL_Surface *back
 }
 
 bool Game::startGame() {
-    mainChar = Main_Character();
     updateWindow();
     SDL_Event eventObject;
     while (!done) {
