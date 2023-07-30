@@ -1,11 +1,11 @@
 #ifndef CRAWL_THE_DUNGEON_GAME_H
 #define CRAWL_THE_DUNGEON_GAME_H
 
-#include "entities/Character.h"
-#include <SDL.h>
-#include <SDL_image.h>
+#include "Entities/Main_Character.cpp"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <string>
-#include "entities/Soldier.h"
+#include "Entities/Soldier.cpp"
 #include "enums/Room_List.cpp"
 #include <ctime>
 #include <unordered_map>
@@ -26,7 +26,7 @@ private:
     int movesLeft = mainChar.movement; //how many moves left in the current turn
     int positionX = 1; //position (x) of the character
     int positionY = 1; //position (y) of the character
-    Character mainChar; //the main character
+    Main_Character mainChar; //the main character
     Soldier *enemies[10]; //all of the enemies
     int floorsTraveled = 1; //how many floors traveled
 

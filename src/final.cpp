@@ -2,7 +2,9 @@
 //Crawl The Dungeon mega file
 #include <iostream>
 #include "Game.h"
-#include <SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+
 //enum to keep track of which value corresponds with each tile type
 const int windowHeight = 720;
 const int windowWidth = 1280;
@@ -60,6 +62,8 @@ void startMenu() {
                         }
                         break;
                 }
+            }  else if (eventObject.window.event == SDL_WINDOWEVENT_EXPOSED) {
+                refreshMenu();
             }
         }
     }
@@ -74,9 +78,9 @@ void refreshMenu() {
 void makeMenu() {
     SDL_Surface *mainText;
     SDL_Surface *startText;
-    menu = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/background.png");;
-    startText = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/startText.png");
-    mainText = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/mainText.png");
+    menu = IMG_Load("./resources/background.png");;
+    startText = IMG_Load("./resources/startText.png");
+    mainText = IMG_Load("./resources/mainText.png");
     SDL_Rect rect;
     rect.x = (windowWidth - mainText->w) / 2;
     rect.y = 10;
@@ -112,9 +116,9 @@ void startup() {
     // TTF_Init();
     myWindow = SDL_CreateWindow("Crawl the Dungeon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);//the main window
     surfaceWithData = SDL_GetWindowSurface(myWindow);
-    background = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/background.png");
-    SDL_SetWindowIcon(myWindow, IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/mainChar.png"));
-    //font = TTF_OpenFont("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/fanwood_text-webfont.ttf", 28);
+    background = IMG_Load("./resources/background.png");
+    SDL_SetWindowIcon(myWindow, IMG_Load("./resources/mainChar.png"));
+    //font = TTF_OpenFont("./resources/fanwood_text-webfont.ttf", 28);
     makeMenu();
     makeHighScore();
     startMenu();

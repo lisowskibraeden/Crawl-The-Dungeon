@@ -12,25 +12,25 @@ Game::Game(SDL_Window *myWindow, SDL_Surface *surfaceWithData, SDL_Surface *back
     this->myWindow = myWindow;
     this->surfaceWithData = surfaceWithData;
     this->background = background;
-    curSurface[BASIC_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/basictiles.png"); //load in all textures
-    curSurface[LAVA_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/lava.png");
-    curSurface[CHARACTER_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/mainChar.png");
-    curSurface[HEALTH_ICON] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/heart.png");
-    curSurface[ENEMY_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/slime.png");
-    curSurface[LOOT_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/loot.png");
-    curSurface[MOVEMENT_ICON] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/movement.png");
-    curSurface[STAIRS_TILE] = IMG_Load("C:/Users/Braeden/repos/Crawl-The-Dungeon/resources/stairs.png");
+    curSurface[BASIC_TILE] = IMG_Load("./resources/basictiles.png"); //load in all textures
+    curSurface[LAVA_TILE] = IMG_Load("./resources/lava.png");
+    curSurface[CHARACTER_TILE] = IMG_Load("./resources/mainChar.png");
+    curSurface[HEALTH_ICON] = IMG_Load("./resources/heart.png");
+    curSurface[ENEMY_TILE] = IMG_Load("./resources/slime.png");
+    curSurface[LOOT_TILE] = IMG_Load("./resources/loot.png");
+    curSurface[MOVEMENT_ICON] = IMG_Load("./resources/movement.png");
+    curSurface[STAIRS_TILE] = IMG_Load("./resources/stairs.png");
     srand(time(nullptr)); //make sure random works correctly
+    mapMaker(allTiles);
     for (int i = 0; i < 10; ++i) {
         for (int x = 0; x < 10; ++x) { //set up the maps
-            allSurfaces[i][x] = (curSurface[allTiles[i][x]]);
+            allSurfaces[i][x] = curSurface[allTiles[i][x]];
         }
     }
 }
 
 bool Game::startGame() {
-    mapMaker(allTiles);
-    mainChar = Character();
+    mainChar = Main_Character();
     updateWindow();
     SDL_Event eventObject;
     while (!done) {
@@ -58,6 +58,8 @@ bool Game::startGame() {
                         nextTurn(); //send to next turn
                         break;
                 }
+            }  else if (eventObject.window.event == SDL_WINDOWEVENT_EXPOSED) {
+                updateWindow();
             }
         }
     }
@@ -139,7 +141,7 @@ void Game::updateWindow() {
         dest.y = dest.y + tileY; //update each time
         dest.x = 0; //reset each time
         for (int x = 0; x < 60; x++) { //run accross columns
-            allSurfaces[i][x] = (curSurface[allTiles[i][x]]); //load in the texture for each tile
+            allSurfaces[i][x] = curSurface[allTiles[i][x]]; //load in the texture for each tile
             SDL_BlitSurface(allSurfaces[i][x], NULL, surfaceWithData, &dest); //add the texture to the window
             dest.x = dest.x + tileX; //increment x to go across columns
 
